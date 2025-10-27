@@ -1,507 +1,111 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AdBridge — Your One-Stop Ad Hub</title>
-  <meta name="description" content="AdBridge — banners, pamphlets, hoardings and more. Connect with local vendors or showcase your ad designs." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AdBridge - Vendor Listings</title>
   <style>
-    :root{
-      --bg:#f6f7fb;
-      --card:#ffffff;
-      --accent:#0b6df0;
-      --muted:#6b7280;
-      --radius:12px;
-      --maxw:1100px;
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #f5f6fa;
+      color: #2f3640;
+      margin: 0;
+      padding: 0;
+      text-align: center;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-      background:linear-gradient(180deg,#f8fbff 0%,var(--bg) 100%);
-      color:#0f172a;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      padding:24px;
-      display:flex;
-      justify-content:center;
+    header {
+      background: linear-gradient(90deg, #007bff, #00a8ff);
+      color: white;
+      padding: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 1px;
     }
-    .site{width:100%;max-width:var(--maxw)}
-    header{
-      display:flex;
-      align-items:center;
-      gap:16px;
-      margin-bottom:18px;
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 30px;
     }
-    .logo{
-      width:64px;height:64px;border-radius:14px;
-      background:linear-gradient(135deg,var(--accent),#6bb3ff);
-      display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:20px;
-      box-shadow:0 6px 20px rgba(11,109,240,0.15);
+    .card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 20px;
+      transition: transform 0.2s;
     }
-    h1{margin:0;font-size:20px}
-    .tag{color:var(--muted);font-size:13px;margin-top:4px}
-    nav{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
-    .btn{
-      background:var(--card);
-      border-radius:10px;
-      padding:8px 12px;
-      display:inline-block;
-      box-shadow:0 2px 8px rgba(14,20,25,0.04);
-      font-weight:600;
-      cursor:pointer;
-      text-decoration:none;color:var(--accent);border:1px solid rgba(11,109,240,0.08)
+    .card:hover {
+      transform: scale(1.03);
     }
-    .hero{
-      margin-top:18px;
-      background:linear-gradient(180deg,#ffffff,#fbfdff);
-      border-radius:var(--radius);
-      padding:18px;
-      display:flex;
-      gap:18px;
-      align-items:center;
-      box-shadow:0 8px 30px rgba(12,20,40,0.04);
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 10px;
     }
-    .hero-left{flex:1}
-    .hero-title{font-size:20px;margin:0 0 8px 0}
-    .hero-sub{color:var(--muted);margin:0 0 12px 0}
-    .hero-actions{display:flex;gap:10px}
-    .primary{
-      background:var(--accent);color:white;padding:10px 14px;border-radius:10px;border:none;font-weight:700;cursor:pointer;
-      box-shadow:0 8px 20px rgba(11,109,240,0.12)
+    .card h3 {
+      margin: 10px 0 5px;
+      color: #273c75;
     }
-    .secondary{background:transparent;border:1px solid rgba(11,109,240,0.12);padding:10px 14px;border-radius:10px;color:var(--accent)}
-    .preview-art{width:170px;height:120px;border-radius:10px;background:
-      linear-gradient(135deg,#e9f1ff,#fff);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700}
-    main{margin-top:18px;display:grid;grid-template-columns:1fr 360px;gap:18px}
-    @media (max-width:900px){main{grid-template-columns:1fr} .preview-art{display:none}}
-    .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-    @media (max-width:600px){.cards{grid-template-columns:1fr}}
-    .card{
-      background:var(--card);
-      border-radius:12px;padding:12px;
-      box-shadow:0 6px 18px rgba(12,20,40,0.04);
-      border:1px solid rgba(15,23,42,0.04);
-      display:flex;gap:12px;align-items:center;
+    .card p {
+      margin: 3px 0;
+      color: #555;
+      font-size: 0.9rem;
     }
-    .card-thumb{
-      width:88px;height:64px;border-radius:8px;background:linear-gradient(135deg,#fff,#f0f8ff);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)
+    footer {
+      background: #273c75;
+      color: white;
+      padding: 10px;
+      margin-top: 20px;
+      font-size: 0.9rem;
     }
-    .card h3{margin:0;font-size:15px}
-    .card p{margin:6px 0 0 0;color:var(--muted);font-size:13px}
-    .sidebar{
-      position:relative;
-      top:0;
-      background:var(--card);
-      border-radius:12px;padding:12px;
-      box-shadow:0 6px 20px rgba(12,20,40,0.04);
-      border:1px solid rgba(15,23,42,0.04);
-    }
-    form{display:flex;flex-direction:column;gap:8px}
-    label{font-size:13px;color:var(--muted)}
-    input[type="text"], input[type="email"], textarea, select{
-      padding:8px 10px;border-radius:8px;border:1px solid #e6eefb;background:#fbfdff;font-size:14px;outline:none;
-    }
-    textarea{min-height:100px;resize:vertical}
-    .small{font-size:12px;color:var(--muted)}
-    .center{display:flex;gap:8px}
-    .cards-bottom{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
-    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
-    /* tiny helper */
-    .muted{color:var(--muted)}
-    .upload-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-    .up-img{width:86px;height:60px;border-radius:8px;object-fit:cover;border:1px solid rgba(12,20,40,0.04)}
-
-    /* vendor list styles (sidebar) */
-    .vendor-box{margin-top:12px;border-radius:10px;padding:10px;background:#fbfdff;border:1px solid #eef4ff}
-    .vendor-item{display:flex;gap:10px;align-items:flex-start;padding:8px;border-radius:8px;border:1px solid rgba(12,20,40,0.04);margin-bottom:8px;background:white}
-    .vendor-thumb{width:48px;height:48px;border-radius:8px;background:linear-gradient(135deg,#e9f1ff,#fff);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)}
-    .vendor-meta{flex:1;text-align:left}
-    .vendor-meta h4{margin:0;font-size:13px}
-    .vendor-meta p{margin:4px 0 0 0;font-size:12px;color:var(--muted)}
-    .vendor-empty{color:var(--muted);font-size:13px}
   </style>
 </head>
 <body>
-  <div class="site">
-    <header>
-      <div class="logo">AB</div>
-      <div>
-        <h1>AdBridge — Your One-Stop Ad Hub</h1>
-        <div class="tag">Banners • Pamphlets • Hoardings — Find vendors or showcase your ads</div>
-        <nav style="margin-top:8px">
-          <a class="btn" href="#categories">Categories</a>
-          <a class="btn" href="#upload">Upload Sample</a>
-          <a class="btn" href="#contact">Contact</a>
-        </nav>
-      </div>
-    </header>
-
-    <section class="hero" aria-label="hero">
-      <div class="hero-left">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-          <div>
-            <div class="hero-title">Get the perfect ad for your business — fast</div>
-            <div class="hero-sub">Browse local vendors, preview sample designs, or request a custom quote. Simple, mobile-first, and free to start.</div>
-            <div class="hero-actions">
-              <button class="primary" onclick="scrollIntoSection('categories')">Browse Categories</button>
-              <button class="secondary" onclick="scrollIntoSection('upload')">Upload Sample</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="preview-art" aria-hidden="true">AD SAMPLES</div>
-    </section>
-
-    <main>
-      <section>
-        <h2 id="categories" style="margin:0 0 10px 0">Popular Categories</h2>
-        <div class="cards" role="list">
-          <article class="card" role="listitem">
-            <div class="card-thumb">B</div>
-            <div>
-              <h3>Banners</h3>
-              <p>Outdoor banners, vinyl prints, retractable stands — sizes & designs.</p>
-            </div>
-          </article>
-
-          <article class="card" role="listitem">
-            <div class="card-thumb">F</div>
-            <div>
-              <h3>Pamphlets & Flyers</h3>
-              <p>Single and multi-page leaflets, double-sided prints, bulk orders.</p>
-            </div>
-          </article>
-
-          <article class="card" role="listitem">
-            <div class="card-thumb">H</div>
-            <div>
-              <h3>Hoardings</h3>
-              <p>Large format hoarding design & placement — city-specific vendors.</p>
-            </div>
-          </article>
-
-          <article class="card" role="listitem">
-            <div class="card-thumb">D</div>
-            <div>
-              <h3>Digital Ads</h3>
-              <p>Social media banners, website headers, and ad creatives for campaigns.</p>
-            </div>
-          </article>
-        </div>
-
-        <div style="margin-top:16px">
-          <h3 style="margin-bottom:8px">How it works</h3>
-          <ol class="small" style="padding-left:18px;margin:0">
-            <li>Browse category and sample designs.</li>
-            <li>Contact vendor using the request form or email (opens your mail app).</li>
-            <li>Negotiate price & delivery directly with vendor — no middleman required.</li>
-          </ol>
-        </div>
-
-        <div style="margin-top:14px">
-          <h3 style="margin-bottom:8px">Sample Listings</h3>
-          <div class="cards-bottom">
-            <!-- simple sample cards -->
-            <div class="card" style="min-width:200px">
-              <div class="card-thumb">S</div>
-              <div>
-                <h3>Banner — Café Promo</h3>
-                <p class="small">3ft x 6ft, vinyl, glossy finish. ₹500</p>
-              </div>
-            </div>
-
-            <div class="card" style="min-width:200px">
-              <div class="card-thumb">S</div>
-              <div>
-                <h3>Flyer — Sale</h3>
-                <p class="small">A5, double-sided, bulk discount. ₹250/100</p>
-              </div>
-            </div>
-
-            <div class="card" style="min-width:200px">
-              <div class="card-thumb">S</div>
-              <div>
-                <h3>Hoarding — Local Area</h3>
-                <p class="small">Design + placement quote on request</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <aside class="sidebar">
-        <h3 style="margin-top:0">Quick Request</h3>
-        <p class="small">Fill the form — it will open your email app with prefilled subject & message so you can send a request to vendors.</p>
-
-      <form id="contactForm" onsubmit="sendMail(event)">
-  <label for="name">Your name</label>
-  <input id="name" type="text" required placeholder="Aditya" />
-
-  <label for="email">Your email</label>
-  <input id="email" type="email" required placeholder="you@mail.com" />
-
-  <label for="type">Ad type</label>
-  <select id="type" required>
-    <option value="Banners">Banners</option>
-    <option value="Pamphlets">Pamphlets & Flyers</option>
-    <option value="Hoardings">Hoardings</option>
-    <option value="Digital">Digital Ads</option>
-  </select>
-
-  <label for="details">Details (size, city, qty)</label>
-  <textarea id="details" placeholder="Write requirements e.g., 3x6 ft vinyl banner, 10 qty, delivery in Patna"></textarea>
-
-  <button type="submit">Send via Gmail</button>
-</form>
-
-<script>
-  function sendMail(e) {
-    e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const type = document.getElementById('type').value;
-    const details = document.getElementById('details').value;
-
-    const subject = encodeURIComponent("Ad Request from " + name);
-    const body = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\nAd Type: ${type}\nDetails: ${details}`
-    );
-
-    // opens Gmail or mail app
-    window.location.href = `mailto:yourmail@gmail.com?subject=${subject}&body=${body}`;
-  }
-</script>
-
-          <label for="name">Your name</label>
-          <input id="name" type="text" required placeholder="Aditya" />
-
-          <label for="email">Your email</label>
-          <input id="email" type="email" required placeholder="you@mail.com" />
-
-          <label for="type">Ad type</label>
-          <select id="type" required>
-            <option value="Banners">Banners</option>
-            <option value="Pamphlets">Pamphlets & Flyers</option>
-            <option value="Hoardings">Hoardings</option>
-            <option value="Digital">Digital Ads</option>
-          </select>
-
-          <label for="msg">Details (size, city, qty)</label>
-          <textarea id="msg" placeholder="Write requirements e.g., 3x6 ft vinyl banner, 10 qty, delivery in Patna"></textarea>
-
-          <div style="display:flex;gap:8px;margin-top:6px">
-            <button class="primary" type="submit">Request Quote</button>
-            <button type="button" class="btn" onclick="copyExample()">Example Text</button>
-          </div>
-        </form>
-
-        <hr style="margin:12px 0;border:none;border-top:1px solid #eef4ff">
-
-        <h4 style="margin:8px 0 6px 0">Upload a sample (local preview)</h4>
-        <p class="small">Showcase your design files (local preview only). Vendors: share this file when contacting customers.</p>
-
-        <div id="upload" style="margin-top:8px">
-          <input id="fileInput" type="file" accept="image/*" multiple onchange="previewFiles()" />
-          <div class="upload-preview" id="previewArea"></div>
-        </div>
-
-        <!-- VENDOR LISTINGS (shows responses from your Google Sheet) -->
-        <div class="vendor-box" id="vendorBox" aria-live="polite" style="margin-top:12px">
-          <strong style="display:block;margin-bottom:8px">Vendor Listings</strong>
-          <div id="vendorList">
-            <div class="vendor-empty">Loading vendors...</div>
-          </div>
-        </div>
-      </aside>
-    </main>
-
-    <footer>
-      <section style="margin-top:14px" id="contact">
-        <div style="max-width:720px;margin:0 auto">
-          <h3 style="margin-bottom:8px">Contact & Support</h3>
-          <p class="muted small" style="margin:0 0 8px 0">Prefer email? Click below to open your mail app with a message to: <strong>adsupport@example.com</strong></p>
-          <div style="display:flex;gap:8px;justify-content:center">
-            <a class="btn" href="mailto:adsupport@example.com?subject=AdBridge%20Support" target="_blank">Email Support</a>
-            <a class="btn" href="https://wa.me/?text=I%20need%20ad%20services%20from%20AdBridge" target="_blank">Share on WhatsApp</a>
-          </div>
-        </div>
-      </section>
-
-      <div style="margin-top:12px">© <span id="year"></span> AdBridge — Built with ❤️ on mobile</div>
-    </footer>
+  <header>AdBridge - Vendor Listings</header>
+  <div class="container" id="vendorContainer">
+    <p>Loading vendor data...</p>
   </div>
+  <footer>© 2025 AdBridge | Connecting Vendors & Businesses</footer>
 
   <script>
-    // small helpers
-    function scrollIntoSection(id){
-      const el = document.getElementById(id);
-      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
-    }
+    const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTUq7EgryNbnkGUWGBL4OzqaniDrrvjAx61albRcsPAflHyA7ln7nbyX9Cv-JaQJO5X2n9nKaWwTqTa/pub?output=csv";
 
-    document.getElementById('year').textContent = new Date().getFullYear();
+    async function loadVendors() {
+      const container = document.getElementById("vendorContainer");
+      try {
+        const response = await fetch(sheetUrl);
+        const data = await response.text();
+        const rows = data.split("\n").map(r => r.split(","));
 
-    function handleContact(e){
-      e.preventDefault();
-      const name = encodeURIComponent(document.getElementById('name').value || 'No name');
-      const email = encodeURIComponent(document.getElementById('email').value || '');
-      const type = encodeURIComponent(document.getElementById('type').value || 'General');
-      const msg = encodeURIComponent(document.getElementById('msg').value || 'Please send a quote.');
+        container.innerHTML = "";
 
-      // Create mailto
-      const subject = `Request: ${type} - ${name}`;
-      const body = `Name: ${name}%0AEmail: ${email}%0AType: ${type}%0A%0ADetails:%0A${msg}%0A%0A--%0AFrom AdBridge`;
+        for (let i = 1; i < rows.length; i++) {
+          const [timestamp, email, vendorName, adType, imageUrl] = rows[i];
+          if (!vendorName) continue;
 
-      // Open default mail client with mailto (works on mobile and desktop with mail apps)
-      window.location.href = `mailto:vendors@yourdomain.com?subject=${encodeURIComponent(subject)}&body=${body}`;
-    }
-
-    function copyExample(){
-      const example = "Hello, I need a 3ft x 6ft vinyl banner for a store opening on Nov 15. Quantity: 2. Delivery: Patna. Budget: ₹1200 each. Please send a quote and lead time.";
-      navigator.clipboard?.writeText(example).then(()=>{
-        alert('Example text copied to clipboard — paste it into the details field or email.');
-      }).catch(()=>alert('Copy failed — long press the details field to paste on your device.'));
-    }
-
-    // file preview
-    function previewFiles(){
-      const input = document.getElementById('fileInput');
-      const area = document.getElementById('previewArea');
-      area.innerHTML = '';
-      if(!input.files) return;
-      Array.from(input.files).slice(0,6).forEach(file=>{
-        if(!file.type.startsWith('image/')) return;
-        const img = document.createElement('img');
-        img.className = 'up-img';
-        img.alt = file.name;
-        const reader = new FileReader();
-        reader.onload = (e)=> img.src = e.target.result;
-        reader.readAsDataURL(file);
-        area.appendChild(img);
-      });
-    }
-
-    /***** VENDOR LISTING: fetch CSV from your published Google Sheet and render in sidebar *****/
-    (function(){
-      // <-- REPLACED/CORRECT LINK: this is the CSV-published link you provided
-      const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7NHwkzh5y4wXYVvEATCCjPNxlVHwMjN8dI_UoPEn5Y9rG5lN042inESYNcsdqRMjQeAy1tHKmIgen/pub?gid=237996850&single=true&output=csv";
-
-      // Basic CSV parser that handles quoted fields
-      function parseCSV(text) {
-        const rows = [];
-        const lines = text.replace(/\r/g, '').split('\n');
-        for (let i = 0; i < lines.length; i++) {
-          const line = lines[i];
-          if (line.trim() === '') continue;
-          const cells = [];
-          let cur = '';
-          let inQuotes = false;
-          for (let j = 0; j < line.length; j++) {
-            const ch = line[j];
-            if (ch === '"' ) {
-              if (inQuotes && line[j+1] === '"') { cur += '"'; j++; } // escaped quote
-              else inQuotes = !inQuotes;
-            } else if (ch === ',' && !inQuotes) {
-              cells.push(cur);
-              cur = '';
-            } else {
-              cur += ch;
-            }
-          }
-          cells.push(cur);
-          rows.push(cells);
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <img src="${imageUrl || "https://via.placeholder.com/300x180"}" alt="${vendorName}">
+            <h3>${vendorName}</h3>
+            <p><strong>Ad Type:</strong> ${adType || "N/A"}</p>
+            <p><strong>Contact:</strong> ${email || "Not Provided"}</p>
+          `;
+          container.appendChild(card);
         }
-        return rows;
-      }
 
-      async function loadVendors() {
-        const listEl = document.getElementById('vendorList');
-        try {
-          const res = await fetch(CSV_URL);
-          if (!res.ok) throw new Error('Network response not ok');
-          const txt = await res.text();
-          const rows = parseCSV(txt);
-          if (rows.length <= 1) {
-            listEl.innerHTML = '<div class="vendor-empty">No vendors yet — waiting for submissions.</div>';
-            return;
-          }
-
-          // assume first row is header: find columns (best-effort)
-          const header = rows[0].map(h => (h||'').trim().toLowerCase());
-          const nameIdx = header.findIndex(h => /name|vendor/.test(h));
-          const typeIdx = header.findIndex(h => /type|ad type|category/.test(h));
-          const descIdx = header.findIndex(h => /desc|description|details/.test(h));
-          const imgIdx = header.findIndex(h => /image|url|photo|link/.test(h));
-
-          // build list (skip header)
-          const items = rows.slice(1).filter(r => r.some(cell => cell && cell.trim() !== ''));
-          if (items.length === 0) {
-            listEl.innerHTML = '<div class="vendor-empty">No vendors yet — waiting for submissions.</div>';
-            return;
-          }
-
-          listEl.innerHTML = '';
-          items.forEach(r => {
-            const vendor = (r[nameIdx] || r[0] || '').trim();
-            const adType = (r[typeIdx] || r[1] || 'Ad').trim();
-            const desc = (r[descIdx] || r[2] || '').trim();
-            const img = (r[imgIdx] || '').trim();
-
-            const item = document.createElement('div');
-            item.className = 'vendor-item';
-            item.innerHTML = `
-              <div class="vendor-thumb">${(adType && adType[0])? adType[0].toUpperCase() : 'V'}</div>
-              <div class="vendor-meta">
-                <h4>${vendor || 'Unnamed Vendor'}</h4>
-                <p><strong>${adType}</strong></p>
-                <p>${desc || ''}</p>
-                ${img ? `<p style="margin-top:6px"><a href="${img}" target="_blank" rel="noopener">View Image</a></p>` : ''}
-              </div>
-            `;
-            listEl.appendChild(item);
-          });
-
-        } catch (err) {
-          console.error('Failed to load vendor CSV:', err);
-          document.getElementById('vendorList').innerHTML = '<div class="vendor-empty">Could not load vendors. Check CSV link and sharing settings.</div>';
+        if (container.innerHTML === "") {
+          container.innerHTML = "<p>No vendors available yet.</p>";
         }
+      } catch (error) {
+        container.innerHTML = "<p>Error loading vendor data. Please check the sheet link.</p>";
+        console.error(error);
       }
+    }
 
-      // initial load, and refresh every 90 seconds
-      loadVendors();
-      setInterval(loadVendors, 90000);
-    })();
+    loadVendors();
   </script>
 </body>
 </html>
-
-<script>
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7NHwkzh5y4wXYVvEATCCjPNxlVHwMjN8dI_UoPEn5Y9rG5lN042inESYNcsdqRMjQeAy1tHKmIgen/pub?gid=237996850&single=true&output=csv";
-
-fetch(sheetURL)
-  .then(res => res.text())
-  .then(data => {
-    const rows = data.split("\n").slice(1);
-    const container = document.createElement("div");
-    container.innerHTML = "<h4 style='margin:10px 0 6px 0'>Vendor Listings</h4>";
-    rows.forEach(r => {
-      const cols = r.split(",");
-      if (cols.length > 1) {
-        const name = cols[0];
-        const city = cols[1];
-        const service = cols[2];
-        container.innerHTML += `
-          <div class="card" style="margin-bottom:8px">
-            <div>
-              <h3>${name}</h3>
-              <p class="small">${service} — ${city}</p>
-            </div>
-          </div>`;
-      }
-    });
-    document.querySelector(".sidebar").appendChild(container);
-  })
-  .catch(err => console.error("CSV Load Error:", err));
-</script>

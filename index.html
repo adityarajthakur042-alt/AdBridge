@@ -3,106 +3,91 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AdBridge - Vendor Listings</title>
+  <title>AdBridge — Vendor Ad Listings</title>
   <style>
     body {
-      font-family: "Poppins", sans-serif;
-      background: #f5f6fa;
-      color: #2f3640;
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      color: #222;
       margin: 0;
-      padding: 0;
-      text-align: center;
+      padding: 20px;
     }
     header {
-      background: linear-gradient(90deg, #007bff, #00a8ff);
-      color: white;
-      padding: 1rem;
-      font-size: 1.5rem;
-      font-weight: bold;
-      letter-spacing: 1px;
+      text-align: center;
+      margin-bottom: 30px;
     }
-    .container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 30px;
-    }
-    .card {
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      padding: 20px;
-      transition: transform 0.2s;
-    }
-    .card:hover {
-      transform: scale(1.03);
-    }
-    .card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 12px;
+    h1 {
+      color: #007bff;
       margin-bottom: 10px;
     }
-    .card h3 {
-      margin: 10px 0 5px;
-      color: #273c75;
+    .vendor-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
     }
-    .card p {
-      margin: 3px 0;
+    .vendor-card {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .vendor-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .vendor-card h3 {
+      margin: 5px 0;
+      color: #333;
+    }
+    .vendor-card p {
+      margin: 2px 0;
+      font-size: 14px;
       color: #555;
-      font-size: 0.9rem;
-    }
-    footer {
-      background: #273c75;
-      color: white;
-      padding: 10px;
-      margin-top: 20px;
-      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <header>AdBridge - Vendor Listings</header>
-  <div class="container" id="vendorContainer">
+  <header>
+    <h1>AdBridge Vendor Listings</h1>
+    <p>Discover all vendors and their ad services — updated live from Google Sheets.</p>
+  </header>
+
+  <section class="vendor-list" id="vendorList">
     <p>Loading vendor data...</p>
-  </div>
-  <footer>© 2025 AdBridge | Connecting Vendors & Businesses</footer>
+  </section>
 
   <script>
     const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTUq7EgryNbnkGUWGBL4OzqaniDrrvjAx61albRcsPAflHyA7ln7nbyX9Cv-JaQJO5X2n9nKaWwTqTa/pub?output=csv";
 
     async function loadVendors() {
-      const container = document.getElementById("vendorContainer");
-      try {
-        const response = await fetch(sheetUrl);
-        const data = await response.text();
-        const rows = data.split("\n").map(r => r.split(","));
+      const response = await fetch(sheetUrl);
+      const data = await response.text();
+      const rows = data.split("\n").slice(1); // skip header
+      const vendorList = document.getElementById("vendorList");
+      vendorList.innerHTML = "";
 
-        container.innerHTML = "";
+      rows.forEach(row => {
+        const cols = row.split(",");
+        const email = cols[1];
+        const vendorName = cols[2];
+        const adType = cols[3];
+        const image = cols[4] ? cols[4].trim() : "";
 
-        for (let i = 1; i < rows.length; i++) {
-          const [timestamp, email, vendorName, adType, imageUrl] = rows[i];
-          if (!vendorName) continue;
-
+        if (vendorName && adType) {
           const card = document.createElement("div");
-          card.className = "card";
+          card.className = "vendor-card";
           card.innerHTML = `
-            <img src="${imageUrl || "https://via.placeholder.com/300x180"}" alt="${vendorName}">
+            ${image ? `<img src="${image}" alt="${vendorName} sample" />` : ""}
             <h3>${vendorName}</h3>
-            <p><strong>Ad Type:</strong> ${adType || "N/A"}</p>
-            <p><strong>Contact:</strong> ${email || "Not Provided"}</p>
+            <p><b>Ad Type:</b> ${adType}</p>
+            <p><b>Email:</b> ${email || "N/A"}</p>
           `;
-          container.appendChild(card);
+          vendorList.appendChild(card);
         }
-
-        if (container.innerHTML === "") {
-          container.innerHTML = "<p>No vendors available yet.</p>";
-        }
-      } catch (error) {
-        container.innerHTML = "<p>Error loading vendor data. Please check the sheet link.</p>";
-        console.error(error);
-      }
+      });
     }
 
     loadVendors();

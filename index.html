@@ -227,7 +227,44 @@
         <h3 style="margin-top:0">Quick Request</h3>
         <p class="small">Fill the form — it will open your email app with prefilled subject & message so you can send a request to vendors.</p>
 
-        <form id="contactForm" onsubmit="handleContact(event)">
+      <form id="contactForm" onsubmit="sendMail(event)">
+  <label for="name">Your name</label>
+  <input id="name" type="text" required placeholder="Aditya" />
+
+  <label for="email">Your email</label>
+  <input id="email" type="email" required placeholder="you@mail.com" />
+
+  <label for="type">Ad type</label>
+  <select id="type" required>
+    <option value="Banners">Banners</option>
+    <option value="Pamphlets">Pamphlets & Flyers</option>
+    <option value="Hoardings">Hoardings</option>
+    <option value="Digital">Digital Ads</option>
+  </select>
+
+  <label for="details">Details (size, city, qty)</label>
+  <textarea id="details" placeholder="Write requirements e.g., 3x6 ft vinyl banner, 10 qty, delivery in Patna"></textarea>
+
+  <button type="submit">Send via Gmail</button>
+</form>
+
+<script>
+  function sendMail(e) {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const type = document.getElementById('type').value;
+    const details = document.getElementById('details').value;
+
+    const subject = encodeURIComponent("Ad Request from " + name);
+    const body = encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\nAd Type: ${type}\nDetails: ${details}`
+    );
+
+    // opens Gmail or mail app
+    window.location.href = `mailto:yourmail@gmail.com?subject=${subject}&body=${body}`;
+  }
+</script>
           <label for="name">Your name</label>
           <input id="name" type="text" required placeholder="Aditya" />
 

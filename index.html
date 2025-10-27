@@ -476,3 +476,32 @@
   </script>
 </body>
 </html>
+
+<script>
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7NHwkzh5y4wXYVvEATCCjPNxlVHwMjN8dI_UoPEn5Y9rG5lN042inESYNcsdqRMjQeAy1tHKmIgen/pub?gid=237996850&single=true&output=csv";
+
+fetch(sheetURL)
+  .then(res => res.text())
+  .then(data => {
+    const rows = data.split("\n").slice(1);
+    const container = document.createElement("div");
+    container.innerHTML = "<h4 style='margin:10px 0 6px 0'>Vendor Listings</h4>";
+    rows.forEach(r => {
+      const cols = r.split(",");
+      if (cols.length > 1) {
+        const name = cols[0];
+        const city = cols[1];
+        const service = cols[2];
+        container.innerHTML += `
+          <div class="card" style="margin-bottom:8px">
+            <div>
+              <h3>${name}</h3>
+              <p class="small">${service} — ${city}</p>
+            </div>
+          </div>`;
+      }
+    });
+    document.querySelector(".sidebar").appendChild(container);
+  })
+  .catch(err => console.error("CSV Load Error:", err));
+</script>

@@ -113,6 +113,15 @@
     .muted{color:var(--muted)}
     .upload-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
     .up-img{width:86px;height:60px;border-radius:8px;object-fit:cover;border:1px solid rgba(12,20,40,0.04)}
+
+    /* vendor list styles (sidebar) */
+    .vendor-box{margin-top:12px;border-radius:10px;padding:10px;background:#fbfdff;border:1px solid #eef4ff}
+    .vendor-item{display:flex;gap:10px;align-items:flex-start;padding:8px;border-radius:8px;border:1px solid rgba(12,20,40,0.04);margin-bottom:8px;background:white}
+    .vendor-thumb{width:48px;height:48px;border-radius:8px;background:linear-gradient(135deg,#e9f1ff,#fff);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)}
+    .vendor-meta{flex:1;text-align:left}
+    .vendor-meta h4{margin:0;font-size:13px}
+    .vendor-meta p{margin:4px 0 0 0;font-size:12px;color:var(--muted)}
+    .vendor-empty{color:var(--muted);font-size:13px}
   </style>
 </head>
 <body>
@@ -265,6 +274,7 @@
     window.location.href = `mailto:yourmail@gmail.com?subject=${subject}&body=${body}`;
   }
 </script>
+
           <label for="name">Your name</label>
           <input id="name" type="text" required placeholder="Aditya" />
 
@@ -296,6 +306,14 @@
         <div id="upload" style="margin-top:8px">
           <input id="fileInput" type="file" accept="image/*" multiple onchange="previewFiles()" />
           <div class="upload-preview" id="previewArea"></div>
+        </div>
+
+        <!-- VENDOR LISTINGS (shows responses from your Google Sheet) -->
+        <div class="vendor-box" id="vendorBox" aria-live="polite" style="margin-top:12px">
+          <strong style="display:block;margin-bottom:8px">Vendor Listings</strong>
+          <div id="vendorList">
+            <div class="vendor-empty">Loading vendors...</div>
+          </div>
         </div>
       </aside>
     </main>
@@ -364,6 +382,97 @@
         area.appendChild(img);
       });
     }
+
+    /***** VENDOR LISTING: fetch CSV from your published Google Sheet and render in sidebar *****/
+    (function(){
+      // <-- REPLACED/CORRECT LINK: this is the CSV-published link you provided
+      const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7NHwkzh5y4wXYVvEATCCjPNxlVHwMjN8dI_UoPEn5Y9rG5lN042inESYNcsdqRMjQeAy1tHKmIgen/pub?gid=237996850&single=true&output=csv";
+
+      // Basic CSV parser that handles quoted fields
+      function parseCSV(text) {
+        const rows = [];
+        const lines = text.replace(/\r/g, '').split('\n');
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          if (line.trim() === '') continue;
+          const cells = [];
+          let cur = '';
+          let inQuotes = false;
+          for (let j = 0; j < line.length; j++) {
+            const ch = line[j];
+            if (ch === '"' ) {
+              if (inQuotes && line[j+1] === '"') { cur += '"'; j++; } // escaped quote
+              else inQuotes = !inQuotes;
+            } else if (ch === ',' && !inQuotes) {
+              cells.push(cur);
+              cur = '';
+            } else {
+              cur += ch;
+            }
+          }
+          cells.push(cur);
+          rows.push(cells);
+        }
+        return rows;
+      }
+
+      async function loadVendors() {
+        const listEl = document.getElementById('vendorList');
+        try {
+          const res = await fetch(CSV_URL);
+          if (!res.ok) throw new Error('Network response not ok');
+          const txt = await res.text();
+          const rows = parseCSV(txt);
+          if (rows.length <= 1) {
+            listEl.innerHTML = '<div class="vendor-empty">No vendors yet — waiting for submissions.</div>';
+            return;
+          }
+
+          // assume first row is header: find columns (best-effort)
+          const header = rows[0].map(h => (h||'').trim().toLowerCase());
+          const nameIdx = header.findIndex(h => /name|vendor/.test(h));
+          const typeIdx = header.findIndex(h => /type|ad type|category/.test(h));
+          const descIdx = header.findIndex(h => /desc|description|details/.test(h));
+          const imgIdx = header.findIndex(h => /image|url|photo|link/.test(h));
+
+          // build list (skip header)
+          const items = rows.slice(1).filter(r => r.some(cell => cell && cell.trim() !== ''));
+          if (items.length === 0) {
+            listEl.innerHTML = '<div class="vendor-empty">No vendors yet — waiting for submissions.</div>';
+            return;
+          }
+
+          listEl.innerHTML = '';
+          items.forEach(r => {
+            const vendor = (r[nameIdx] || r[0] || '').trim();
+            const adType = (r[typeIdx] || r[1] || 'Ad').trim();
+            const desc = (r[descIdx] || r[2] || '').trim();
+            const img = (r[imgIdx] || '').trim();
+
+            const item = document.createElement('div');
+            item.className = 'vendor-item';
+            item.innerHTML = `
+              <div class="vendor-thumb">${(adType && adType[0])? adType[0].toUpperCase() : 'V'}</div>
+              <div class="vendor-meta">
+                <h4>${vendor || 'Unnamed Vendor'}</h4>
+                <p><strong>${adType}</strong></p>
+                <p>${desc || ''}</p>
+                ${img ? `<p style="margin-top:6px"><a href="${img}" target="_blank" rel="noopener">View Image</a></p>` : ''}
+              </div>
+            `;
+            listEl.appendChild(item);
+          });
+
+        } catch (err) {
+          console.error('Failed to load vendor CSV:', err);
+          document.getElementById('vendorList').innerHTML = '<div class="vendor-empty">Could not load vendors. Check CSV link and sharing settings.</div>';
+        }
+      }
+
+      // initial load, and refresh every 90 seconds
+      loadVendors();
+      setInterval(loadVendors, 90000);
+    })();
   </script>
 </body>
-  </html>
+</html>
